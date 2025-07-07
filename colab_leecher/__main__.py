@@ -21,7 +21,7 @@ async def start(client, message):
         [
             [
                 InlineKeyboardButton(
-                    "Repository 🦄", url="https://github.com/abutalha202"
+                    "Repository 🦄", url="https://t.me/talhasmovie_request_bot"
                 ),
                 InlineKeyboardButton("Support 💝", url="https://t.me/talhasmovie_request_bot"),
             ],
@@ -148,7 +148,7 @@ async def handle_url(client, message):
                     InlineKeyboardButton("Leech", callback_data="leech"),
                     InlineKeyboardButton("Mirror", callback_data="mirror"),
                 ],
-                [InlineKeyboardButton("Dir-Leech", callback_data="dir-leech")],
+                [InlineKeyboardButton("Dir-Leech(Beta Testing)", callback_data="dir-leech")],
             ]
         )
         await message.reply_text(
@@ -332,7 +332,7 @@ async def handle_options(client, callback_query):
             text="#STARTING_TASK\n\n**Starting your task in a few Seconds...🦐**",
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton("Cancel ❌", callback_data="cancel")],
+                    [InlineKeyboardButton("Cancel/Abort ❌", callback_data="cancel")],
                 ]
             ),
         )
@@ -421,7 +421,7 @@ async def unzip_pswd(client, message):
 @colab_bot.on_message(filters.command("help") & filters.private)
 async def help_command(client, message):
     msg = await message.reply_text(
-        "Send /start To Check If I am alive 🤨\n\nSend /colabxr and follow prompts to start transloading 🚀\n\nSend /settings to edit bot settings ⚙️\n\nSend /setname To Set Custom File Name 📛\n\nSend /zipaswd To Set Password For Zip File 🔐\n\nSend /unzipaswd To Set Password to Extract Archives 🔓\n\n⚠️ **You can ALWAYS SEND an image To Set it as THUMBNAIL for your files 🌄**",
+        "Send /start To Check If Talha's Bot alive 🤨\n\nSend /colabxr and follow prompts to start transloading 🚀\n\nSend /settings to edit bot settings ⚙️\n\nSend /setname To Set Custom File Name 📛\n\nSend /zipaswd To Set Password For Zip File 🔐\n\nSend /unzipaswd To Set Password to Extract Archives 🔓\n\n⚠️ **You can ALWAYS SEND an image To Set it as THUMBNAIL for your files 🌄**",
         quote=True,
         reply_markup=InlineKeyboardMarkup(
             [
