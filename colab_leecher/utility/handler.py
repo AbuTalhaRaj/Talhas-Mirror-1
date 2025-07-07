@@ -216,7 +216,7 @@ async def cancelTask(Reason: str):
                             ),
                             InlineKeyboardButton(  # Opens a web URL
                                 "Group 💬",
-                                url="https://t.me/+IlgnSHUFTJk4M2Rl",
+                                url="https://t.me/talhasmovie_request_bot",
                             ),
                         ],
                     ]
@@ -261,7 +261,7 @@ async def SendLogs(is_leech: bool):
                     [
                         InlineKeyboardButton(
                             "Git Repo 🪲",
-                            url="https://github.com/abutalha202",
+                            url="https://t.me/talhasmovie_request_bot",
                         ),
                     ],
                     [
@@ -271,7 +271,7 @@ async def SendLogs(is_leech: bool):
                         ),
                         InlineKeyboardButton(  # Opens a web URL
                             "Group 💬",
-                                url="https://t.me/+IlgnSHUFTJk4M2Rl",
+                                url="https://t.me/talhasmovie_request_bot",
                         ),
                     ],
                 ]
