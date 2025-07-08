@@ -1,8 +1,13 @@
 import io
+import logging
+import pickle
 from natsort import natsorted
 from re import search as re_search
 from os import makedirs, path as ospath
 from urllib.parse import parse_qs, urlparse
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaIoBaseDownload
 from colab_leecher.utility.handler import cancelTask
 from colab_leecher.utility.helper import sizeUnit, getTime, speedETA, status_bar
 from colab_leecher.utility.variables import Gdrive, Messages, Paths, BotTimes, Transfer
