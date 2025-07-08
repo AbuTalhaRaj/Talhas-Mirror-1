@@ -22,7 +22,7 @@ async def progress_bar(current, total):
         eta=getTime(eta),
         done=sizeUnit(current + sum(Transfer.up_bytes)),
         left=sizeUnit(Transfer.total_down_size),
-        engine="Pyrofork 💥",
+        engine="Talha's Pyrogram 💥",
     )
 
 
@@ -95,8 +95,7 @@ async def upload_file(file_path, real_name):
         Transfer.sent_file_names.append(real_name)
 
     except FloodWait as e:
-        logging.warning(f"FloodWait: Waiting {e.value} Seconds Before Trying Again.")
-        await sleep(e.value)  # Wait dynamic FloodWait seconds before Trying Again
+        await sleep(2)  # Wait 2 seconds before Trying Again
         await upload_file(file_path, real_name)
     except Exception as e:
         logging.error(f"Error When Uploading : {e}")
