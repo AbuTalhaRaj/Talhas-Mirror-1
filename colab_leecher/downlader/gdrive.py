@@ -180,7 +180,7 @@ async def gDownloadFile(file_id, path):
                         eta=getTime(eta),
                         done=sizeUnit(down_done),
                         left=sizeUnit(Transfer.total_down_size),
-                        engine="G-Api ♻️",
+                        engine="Talha's G-Api ♻️",
                     )
                 Transfer.down_bytes.append(int(file["size"]))
 
