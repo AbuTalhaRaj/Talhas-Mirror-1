@@ -9,7 +9,7 @@ from colab_leecher.utility.helper import sizeUnit, fileType, getTime, status_bar
 
 async def progress_bar(current, total):
     global status_msg, status_head
-    upload_speed = 1000 * 1024 * 1024  # Increased upload speed chunk size
+    upload_speed = 4 * 1024 * 1024
     elapsed_time_seconds = (datetime.now() - BotTimes.task_start).seconds
     if current > 0 and elapsed_time_seconds > 0:
         upload_speed = current / elapsed_time_seconds
@@ -22,7 +22,7 @@ async def progress_bar(current, total):
         eta=getTime(eta),
         done=sizeUnit(current + sum(Transfer.up_bytes)),
         left=sizeUnit(Transfer.total_down_size),
-        engine="Pyrogram 💥",
+        engine="Pyrofork 💥",
     )
 
 
@@ -95,8 +95,8 @@ async def upload_file(file_path, real_name):
         Transfer.sent_file_names.append(real_name)
 
     except FloodWait as e:
-        await sleep(2)  # Wait 2 seconds before Trying Again
+        logging.warning(f"FloodWait: Waiting {e.value} Seconds Before Trying Again.")
+        await sleep(e.value)  # Wait dynamic FloodWait seconds before Trying Again
         await upload_file(file_path, real_name)
     except Exception as e:
         logging.error(f"Error When Uploading : {e}")
-            
