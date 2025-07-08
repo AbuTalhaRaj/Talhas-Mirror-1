@@ -4,6 +4,7 @@ import logging
 from time import time
 from datetime import datetime
 from os import makedirs, path as ospath, system
+
 from colab_leecher import OWNER, colab_bot, DUMP_ID
 from colab_leecher.downlader.manager import calDownSize, get_d_name, downloadManager
 from colab_leecher.utility.helper import getSize, applyCustomName, keyboard, sysINFO
@@ -25,6 +26,24 @@ from colab_leecher.utility.variables import (
     TaskError,
 )
 
+# ✅ Updated Paths with local fallback if GDrive not mounted
+class Paths:
+    BASE_PATH = "/content/colab_leecher"
+    WORK_PATH = ospath.join(BASE_PATH, "work")
+    down_path = ospath.join(WORK_PATH, "downloads")
+    temp_dirleech_path = ospath.join(WORK_PATH, "dir_leech_temp")
+    temp_zpath = ospath.join(WORK_PATH, "temp_zip")
+    temp_unzip_path = ospath.join(WORK_PATH, "temp_unzip")
+    THMB_PATH = ospath.join(BASE_PATH, "thumb.jpg")
+    DEFAULT_HERO = ospath.join(BASE_PATH, "hero.jpg")
+
+    MOUNTED_DRIVE = "/content/drive/MyDrive"
+
+    if ospath.exists(MOUNTED_DRIVE):
+        mirror_dir = ospath.join(MOUNTED_DRIVE, "Colab_Mirror")
+    else:
+        mirror_dir = ospath.join(WORK_PATH, "Mirror_Output")
+
 
 async def taskScheduler():
     global BOT, MSG, BotTimes, Messages, Paths, Transfer, TaskError
@@ -35,12 +54,12 @@ async def taskScheduler():
         BOT.Mode.type == "zip",
         BOT.Mode.mode == "dir-leech",
     )
-    # Reset Texts
+
     Messages.download_name = ""
     Messages.task_msg = f"<b>🦞 TASK MODE » </b>"
     Messages.dump_task = (
-        Messages.task_msg
-        + f"<i>{BOT.Mode.type.capitalize()} {BOT.Mode.mode.capitalize()} as {BOT.Setting.stream_upload}</i>\n\n<b>🖇️ SOURCES » </b>"
+        Messages.task_msg +
+        f"<i>{BOT.Mode.type.capitalize()} {BOT.Mode.mode.capitalize()} as {BOT.Setting.stream_upload}</i>\n\n<b>🖇️ SOURCES » </b>"
     )
     Transfer.sent_file = []
     Transfer.sent_file_names = []
@@ -80,8 +99,7 @@ async def taskScheduler():
                 Messages.dump_task = code_link
             else:
                 Messages.dump_task += code_link
-                
-    # Get the current date and time in the specified time zone
+
     cdt = datetime.now(pytz.timezone("Asia/Dhaka"))
     dt = cdt.strftime(" %d-%m-%Y")
     Messages.dump_task += f"\n\n<b>📆 Task Date » </b><i>{dt}</i>"
@@ -90,7 +108,6 @@ async def taskScheduler():
 
     if ospath.exists(Paths.WORK_PATH):
         shutil.rmtree(Paths.WORK_PATH)
-        # makedirs(Paths.WORK_PATH)
         makedirs(Paths.down_path)
     else:
         makedirs(Paths.WORK_PATH)
@@ -113,13 +130,10 @@ async def taskScheduler():
 
     await MSG.status_msg.delete()
     img = Paths.THMB_PATH if ospath.exists(Paths.THMB_PATH) else Paths.HERO_IMAGE
-    MSG.status_msg = await colab_bot.send_photo(  # type: ignore
+    MSG.status_msg = await colab_bot.send_photo(
         chat_id=OWNER,
         photo=img,
-        caption=Messages.task_msg
-        + Messages.status_head
-        + f"\n📝 __Starting DOWNLOAD...__"
-        + sysINFO(),
+        caption=Messages.task_msg + Messages.status_head + f"\n📝 __Starting DOWNLOAD...__" + sysINFO(),
         reply_markup=keyboard(),
     )
 
@@ -172,13 +186,8 @@ async def Do_Leech(source, is_dir, is_ytdl, is_zip, is_unzip, is_dualzip):
                     await Leech(Paths.temp_dirleech_path, True)
     else:
         await downloadManager(source, is_ytdl)
-
         Transfer.total_down_size = getSize(Paths.down_path)
-
-        # Renaming Files With Custom Name
         applyCustomName()
-
-        # Preparing To Upload
         if is_zip:
             await Zip_Handler(Paths.down_path, True, True)
             await Leech(Paths.temp_zpath, True)
@@ -186,34 +195,24 @@ async def Do_Leech(source, is_dir, is_ytdl, is_zip, is_unzip, is_dualzip):
             await Unzip_Handler(Paths.down_path, True)
             await Leech(Paths.temp_unzip_path, True)
         elif is_dualzip:
-            print("Got into un doubled zip")
             await Unzip_Handler(Paths.down_path, True)
             await Zip_Handler(Paths.temp_unzip_path, True, True)
             await Leech(Paths.temp_zpath, True)
         else:
             await Leech(Paths.down_path, True)
-
     await SendLogs(True)
 
 
 async def Do_Mirror(source, is_ytdl, is_zip, is_unzip, is_dualzip):
-    if not ospath.exists(Paths.MOUNTED_DRIVE):
-        await cancelTask(
-            "Google Drive is NOT MOUNTED ! Stop the Bot and Run the Google Drive Cell to Mount, then Try again !"
-        )
-        return
-
     if not ospath.exists(Paths.mirror_dir):
         makedirs(Paths.mirror_dir)
 
     await downloadManager(source, is_ytdl)
-
     Transfer.total_down_size = getSize(Paths.down_path)
-
     applyCustomName()
 
     cdt = datetime.now()
-    cdt_ = cdt.strftime("Uploaded » %Y-%m-%d %H:%M:%S")
+    cdt_ = cdt.strftime("Uploaded » %Y-%m-%d %H-%M-%S")
     mirror_dir_ = ospath.join(Paths.mirror_dir, cdt_)
 
     if is_zip:
@@ -230,3 +229,4 @@ async def Do_Mirror(source, is_ytdl, is_zip, is_unzip, is_dualzip):
         shutil.copytree(Paths.down_path, mirror_dir_)
 
     await SendLogs(False)
+    
