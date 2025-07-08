@@ -33,7 +33,7 @@ async def YTDL_Status(link, num):
                     eta=YTDL.eta,
                     done=YTDL.done,
                     left=YTDL.left,
-                    engine="Xr-YtDL 🏮",
+                    engine="Talha's Xr-YtDL 🏮",
                 )
             except Exception:
                 pass
