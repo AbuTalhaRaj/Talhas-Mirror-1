@@ -1,6 +1,4 @@
 import io
-import logging
-import pickle
 from natsort import natsorted
 from re import search as re_search
 from os import makedirs, path as ospath
