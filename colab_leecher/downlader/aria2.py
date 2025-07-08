@@ -116,5 +116,5 @@ async def on_output(output: str):
             eta,
             downloaded_bytes,
             total_size,
-            "Aria2c 🧨",
+            "Talha's Aria2c 🧨",
         )
